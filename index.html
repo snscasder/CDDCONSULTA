@@ -1,0 +1,672 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal CDD- Consulta</title>
+ <style>
+    :root{
+      --bg: #ffffff;
+      --bg-soft: #faf7f8;         
+      --card: #ffffff;
+      --card2: #f6eef1;
+      --text: #262124;             
+      --muted: #6b5a62;
+      --border: #e7dde1;
+
+      --guinda-900: #3d0e26;      
+      --guinda-800: #56163a;       
+      --guinda-700: #6d1c47;       
+      --guinda-100: #f5e6ec;      
+
+      --accent: var(--guinda-700);
+      --accent2: #2f7d4f;          
+      --danger:#b3261e;
+
+      --shadow: 0 8px 22px rgba(61,14,38,.08);
+      --radius: 10px;
+
+      --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+      --font-body: 'Segoe UI', ui-sans-serif, system-ui, -apple-system, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .site-topbar{
+      background: var(--guinda-900);
+      height: 34px;
+    }
+    .site-nav{
+      background: var(--guinda-800);
+      display:flex;
+      align-items:center;
+      gap: 28px;
+      padding: 16px 24px;
+    }
+    .site-nav a{
+      color: rgba(255,255,255,.92);
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .site-nav a:hover{ color: #ffffff; text-decoration: underline; }
+
+    .container{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 22px 16px 40px;
+    }
+
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+      padding-top: 8px;
+    }
+
+    .title-wrap{
+      display:flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    h1{
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(28px, 4.2vw, 44px);
+      margin:0;
+      letter-spacing: .1px;
+      color: var(--guinda-700);
+      line-height: 1.05;
+    }
+
+    .subtitle{
+      margin:0;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--card2);
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    /* Barra de búsqueda */
+    .toolbar{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items:center;
+      justify-content: space-between;
+      margin: 18px 0 18px;
+      }
+
+    .btn-excel{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #eaf4ee;
+      color: #1e6b3f;
+      border: 1px solid #bfe0cc;
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .btn-excel:hover {
+      background: #dcefe3;
+      border-color: #9fd4b4;
+      color: #144a2b;
+      transform: translateY(-1px);
+    }
+
+    .search{
+      flex: 1 1 420px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .search .icon{
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display:grid;
+      place-items:center;
+      background: var(--guinda-100);
+      border: 1px solid #e3c3d1;
+      color: var(--guinda-700);
+      flex: 0 0 auto;
+    }
+
+    input[type="search"]{
+      width: 100%;
+      outline: none;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+    }
+    input[type="search"]::placeholder{ color: #9c8b93; }
+
+    .meta{
+      flex: 0 0 auto;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card2);
+    }
+
+    .pill{
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--guinda-100);
+      border: 1px solid #e3c3d1;
+      color: var(--guinda-700);
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    /* Tabla */
+    .table-card{
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    thead th{
+      text-align: left;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--guinda-900);
+      background: var(--guinda-800);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    tbody td{
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) td{
+      background: var(--bg-soft);
+    }
+
+    tbody tr:hover td{
+      background: var(--guinda-100);
+    }
+
+    /* Resaltado del término buscado */
+    mark{
+      background: #f3c8d8;
+      color: var(--guinda-900);
+      padding: 0 2px;
+      border-radius: 4px;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card2);
+      color: var(--text);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .tag .dot{
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--guinda-700);
+      box-shadow: 0 0 0 4px var(--guinda-100);
+    }
+
+    .empty{
+      padding: 22px 16px;
+      color: var(--muted);
+    }
+
+    .scroll{
+      overflow:auto;
+      max-height: 62vh;
+    }
+
+    .merc-empty{
+      color: #b7a6ae;
+      font-style: italic;
+    }
+
+    /* Responsivo */
+    @media (max-width: 860px){
+      header{
+        flex-direction: column;
+        align-items:flex-start;
+      }
+      table{ min-width: 860px; }
+      .meta{ width: 100%; justify-content:flex-start; }
+      .site-nav{ gap: 18px; padding: 14px 16px; flex-wrap: wrap; }
+    }
+  </style>
+
+<!-- LIBRERÍA EXPORTAR A EXCEL -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-wrap">
+         <h1>Acuerdo que modifica al diverso que establece las mercancías cuya importación está sujeta a regulación por parte de la Secretaría de Agricultura y Desarrollo Rural, así como la emisión del certificado de origen para la exportación de café.</h1>
+         <p class="subtitle">Consulta fracciones arancelarias y NICO de las mercancias reguladas por SADER a traves del SENASICA.</p>
+      </div>
+    </header>
+
+    <section class="toolbar">
+      <div class="search" role="search" aria-label="Buscar por fracción arancelaria">
+        <div class="icon">⌕</div>
+        <input id="searchInput" type="search" placeholder="Escribe una fracción arancelaria (ej. 2833.21 o 2833.21.01)..." autocomplete="off" inputmode="numeric" />
+      </div>
+
+      <div class="meta" aria-live="polite">
+        <span>Mostrando:</span>
+        <span class="pill" id="countShown">0</span>
+        <span>de</span>
+        <span class="pill" id="countTotal">0</span>
+      </div>
+
+<!-- BOTÓN DE DESCARGA -->
+      <button type="button" class="btn-excel" onclick="exportarExcel()">
+        Descargar Excel
+      </button>
+    </section>
+
+    <div class="table-card">
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 140px;">Fraccion arancelaria</th>
+              <th style="width: 220px;">Descripcion</th>
+              <th style="width: 90px;">NICO</th>
+              <th style="width: 180px;">Descripcion NICO</th>
+              <th style="width: 180px;">Unidad de medida tarifa (UMT)</th>
+              <th style="width: 160px;">Acotacion</th>
+              <th style="width: 150px;">Requisito</th>
+              <th style="width: 220px;">Mercancias</th>
+              <th style="width: 200px;">Estructura actual de la LIGIE</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Filas generadas por JS -->
+          </tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="empty" style="display:none;">
+        No se encontró ninguna fracción arancelaria con ese valor.
+      </div>
+      <div id="loadingState" class="empty" style="display:block;">
+        Cargando datos...
+      </div>
+      <div id="errorState" class="empty" style="display:none; color:#f87171;"></div>
+    </div>
+  </div>
+
+<script>
+    // FUNCIÓN PARA DESCARGAR LA TABLA A EXCEL
+function exportarExcel() {
+  const tabla = document.getElementById('tablaDatos') || document.querySelector('table');
+
+  if (!tabla) {
+    alert("No se encontró la tabla para exportar.");
+    return;
+  }
+
+  // 1. Extraemos los datos de la tabla manualmente como texto puro
+  const filas = [];
+  const trs = tabla.querySelectorAll('tr');
+
+  trs.forEach(tr => {
+    // Solo procesamos filas visibles (por si hay un filtro de búsqueda activo)
+    if (tr.style.display === 'none') return;
+
+    const fila = [];
+    const celdas = tr.querySelectorAll('th, td');
+    
+    celdas.forEach(celda => {
+      // Usamos textContent/innerText para obtener el texto exacto sin HTML ni formatos
+      let texto = celda.innerText || celda.textContent;
+      // Limpiamos espacios extra al inicio/final o saltos de línea
+      texto = texto.trim();
+      fila.push(texto);
+    });
+
+    if (fila.length > 0) {
+      filas.push(fila);
+    }
+  });
+
+  // 2. Creamos la hoja de cálculo directamente desde el arreglo de texto puro
+  const worksheet = XLSX.utils.aoa_to_sheet(filas, { raw: true });
+
+  // 3. Forzamos a que el tipo de cada celda sea 's' (string / texto)
+  for (let cell in worksheet) {
+    if (cell[0] === '!') continue;
+    worksheet[cell].t = 's';
+    worksheet[cell].z = '@'; // Formato de celda "Texto" en Excel
+  }
+
+  // 4. Creamos y descargamos el libro de Excel
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Mercancias_SADER");
+
+  XLSX.writeFile(workbook, "Consulta_Mercancias_SADER.xlsx");
+}
+
+   /* =========================================================
+       CONFIGURACIÓN DE ORIGEN DE DATOS 
+       =========================================================
+    */
+    const SHEET_SOURCES = [
+      {
+        id: "1XuVa_tcC1UbGhcXqbfOk1g-xeWKjl26O",
+        gid: "1319816404"
+      }
+      // , { id: "OTRO_ID_AQUI", gid: "OTRO_GID_AQUI" }  // <- ejemplo de una segunda hoja
+    ];
+
+    const COLUMN_MAP = {
+      fraccion: ["fraccion", "fracción", "fraccion arancelaria"],
+      descripcionfraccion: ["descripcionfraccion", "descripcion", "descripción"],
+      NICO: ["nico"],
+      descripcionnico: ["descripcionnico", "descripcion nico", "descripción nico"],
+      umt: ["umt", "unidad de medida tarifa"],
+      acotacion: ["acotacion", "acotación"],
+      requsito: ["requsito", "requisito"],
+      mercancias: ["mercancias", "mercancías"],
+      estructura: ["estructura", "estructura actual de la ligie"]
+    };
+
+    let DATA = [];
+
+    function normalizeHeader(h){
+      return String(h ?? "").trim().toLowerCase();
+    }
+
+    function mapRows(rawRows){
+      return rawRows.map(row => {
+        const out = {};
+        for (const key in COLUMN_MAP){
+          const candidates = COLUMN_MAP[key];
+          let value = "";
+          for (const rawKey in row){
+            if (candidates.includes(normalizeHeader(rawKey))){
+              value = row[rawKey] ?? "";
+              break;
+            }
+          }
+          out[key] = String(value).trim();
+        }
+        return out;
+      }).filter(item => item.fraccion); // ignora filas totalmente vacías
+    }
+
+    let jsonpCounter = 0;
+
+    function fetchSheetAsRows(source){
+      return new Promise((resolve, reject) => {
+        const callbackName = "gsheetCb" + (jsonpCounter++) + "_" + Date.now();
+        const timeoutId = setTimeout(() => {
+          cleanup();
+          reject(new Error("Tiempo de espera agotado al cargar la hoja " + source.id));
+        }, 15000);
+
+        function cleanup(){
+          clearTimeout(timeoutId);
+          delete window[callbackName];
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        window[callbackName] = function(json){
+          try {
+            if (!json || json.status === "error" || !json.table){
+              throw new Error("Respuesta inválida.");
+            }
+            const cols = json.table.cols.map(c => c.label || c.id || "");
+            const rawRows = json.table.rows.map(r => {
+              const obj = {};
+              cols.forEach((label, i) => {
+                const cell = r.c && r.c[i];
+                obj[label] = cell ? (cell.f ?? cell.v ?? "") : "";
+              });
+              return obj;
+            });
+            resolve(mapRows(rawRows));
+          } catch (err) {
+            reject(err);
+          } finally {
+            cleanup();
+          }
+        };
+
+        const script = document.createElement("script");
+        script.src =
+          `https://docs.google.com/spreadsheets/d/${source.id}/gviz/tq` +
+          `?gid=${encodeURIComponent(source.gid)}&headers=1` +
+          `&tqx=out:json;responseHandler:${callbackName}`;
+        script.onerror = () => {
+          cleanup();
+          reject(new Error("No se pudo cargar la hoja " + source.id + " (revisa que el id/gid sean correctos y que la hoja sea pública)."));
+        };
+        document.body.appendChild(script);
+      });
+    }
+
+    async function loadData(){
+      const loadingState = document.getElementById("loadingState");
+      const errorState = document.getElementById("errorState");
+      try {
+        const chunks = await Promise.all(SHEET_SOURCES.map(fetchSheetAsRows));
+        DATA = chunks.flat();
+        loadingState.style.display = "none";
+        countTotal.textContent = DATA.length;
+        renderRows(DATA, "");
+      } catch (err) {
+        console.error("Error cargando datos", err);
+        loadingState.style.display = "none";
+        errorState.style.display = "block";
+        errorState.textContent =
+          "No se pudieron cargar los datos desde Google Sheets. Revisa que la hoja esté compartida como " +
+          "\"Cualquier persona con el enlace puede ver\" y que el id/gid en SHEET_SOURCES sean correctos. " +
+          "Detalle: " + (err && err.message ? err.message : err);
+      }
+    }
+
+    /* =========================
+       Utilidades UI
+       ========================= */
+    const $ = (id) => document.getElementById(id);
+
+    const searchInput = $("searchInput");
+    const tableBody = $("tableBody");
+    const emptyState = $("emptyState");
+
+    const countShown = $("countShown");
+    const countTotal = $("countTotal");
+
+    countTotal.textContent = DATA.length;
+
+    function normalize(str){
+      return String(str ?? "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, ""); // quita tildes
+    }
+
+    // Solo deja dígitos y puntos, así el usuario puede escribir
+    // "283321" o "2833.21.01" o "2833-21-01" y funciona igual.
+    function normalizeFraccion(str){
+      return String(str ?? "").replace(/[^0-9.]/g, "");
+    }
+
+    function escapeHtml(value){
+      const str = String(value ?? "");
+      return str
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    // Resalta el término encontrado dentro de la fracción arancelaria
+    function highlightFraccion(fraccion, rawQuery){
+      const safe = escapeHtml(fraccion);
+      const q = normalizeFraccion(rawQuery);
+      if (!q) return safe;
+
+      const target = normalizeFraccion(fraccion);
+      const idx = target.indexOf(q);
+      if (idx === -1) return safe;
+
+      // Busca la posición equivalente dentro del string original (con puntos)
+      // recorriendo caracter por caracter para no desalinear el resaltado.
+      let count = 0, start = -1, end = -1;
+      for (let i = 0; i < fraccion.length; i++){
+        if (/[0-9.]/.test(fraccion[i])){
+          if (count === idx) start = i;
+          if (count === idx + q.length - 1) { end = i + 1; break; }
+          count++;
+        }
+      }
+      if (start === -1 || end === -1) return safe;
+
+      const before = escapeHtml(fraccion.slice(0, start));
+      const match = escapeHtml(fraccion.slice(start, end));
+      const after = escapeHtml(fraccion.slice(end));
+      return `${before}<mark>${match}</mark>${after}`;
+    }
+
+    function renderRows(rows, rawQuery){
+      tableBody.innerHTML = "";
+
+      if (!rows.length){
+        emptyState.style.display = "block";
+        countShown.textContent = "0";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      const frag = document.createDocumentFragment();
+
+      for (const item of rows){
+        const tr = document.createElement("tr");
+        const mercHtml = item.mercancias
+          ? escapeHtml(item.mercancias)
+          : `<span class="merc-empty">Sin datos</span>`;
+        const estructuraHtml = item.estructura
+    ? escapeHtml(item.estructura)
+    : `<span class="merc-empty">Sin datos</span>`;
+
+        tr.innerHTML = `
+          <td>${highlightFraccion(item.fraccion, rawQuery)}</td>
+          <td>${escapeHtml(item.descripcionfraccion)}</td>
+          <td>${escapeHtml(item.NICO)}</td>
+          <td>${escapeHtml(item.descripcionnico)}</td>
+          <td>${escapeHtml(item.umt)}</td>
+          <td>${escapeHtml(item.acotacion)}</td>
+          <td>
+             <span class="tag">
+              <span class="dot"></span>
+              ${escapeHtml(item.requsito)}
+            </span>
+          </td>
+          <td>${mercHtml}</td>
+          <td>${estructuraHtml}</td>
+        `;
+        frag.appendChild(tr);
+      }
+
+      tableBody.appendChild(frag);
+      countShown.textContent = String(rows.length);
+    }
+
+    /* =========================
+       Búsqueda por fracción arancelaria
+       ========================= */
+    function filterData(query){
+      const q = normalizeFraccion(query);
+      if (!q) return DATA;
+      return DATA.filter(item => normalizeFraccion(item.fraccion).includes(q));
+    }
+
+    function onSearch(){
+      const rawQuery = searchInput.value;
+      const rows = filterData(rawQuery);
+      renderRows(rows, rawQuery);
+    }
+
+    searchInput.addEventListener("input", onSearch);
+
+    loadData();
+  </script>
+</body>
+</html>
