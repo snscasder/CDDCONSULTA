@@ -232,12 +232,12 @@ thead th, tbody td {
 }
 
 /* Anchos proporcionales por columna */
-th:nth-child(1), td:nth-child(1) { width: 12%; } /* Fracción arancelaria */
-th:nth-child(2), td:nth-child(2) { width: 28%; } /* Descripción */
-th:nth-child(3), td:nth-child(3) { width: 8%;  } /* NICO */
-th:nth-child(4), td:nth-child(4) { width: 28%; } /* Descripción NICO */
-th:nth-child(5), td:nth-child(5) { width: 12%; } /* UMT */
-th:nth-child(6), td:nth-child(6) { width: 12%; } /* Acotación */
+th:nth-child(1), td:nth-child(1) { width: 10%; } /* Fracción arancelaria */
+th:nth-child(2), td:nth-child(2) { width: 35%; } /* Estructura actual de la LIGIE / Descripción (MÁS ANCHA) */
+th:nth-child(3), td:nth-child(3) { width: 6%;  } /* NICO */
+th:nth-child(4), td:nth-child(4) { width: 25%; } /* Descripción NICO */
+th:nth-child(5), td:nth-child(5) { width: 25%; } /* UMT */
+th:nth-child(6), td:nth-child(6) { width: 14%; } /* Acotación */
 
     tbody tr:nth-child(even) td{
       background: var(--bg-soft);
@@ -256,17 +256,14 @@ th:nth-child(6), td:nth-child(6) { width: 12%; } /* Acotación */
     }
 
     .tag{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--card2);
-      color: var(--text);
-      font-size: 13px;
-      white-space: nowrap;
-    }
+      display: block;          /* Cambiado de inline-flex a block para fluir con el texto */
+  padding: 0;              /* Eliminamos el relleno de cápsula */
+  border: none;            /* Quitamos el borde */
+  background: transparent; /* Quitamos el fondo rosado */
+  color: var(--text);
+  font-size: 14px;
+  white-space: normal;     /* Permite que el texto dé saltos de línea sin encimarse */
+}
 
     .tag .dot{
       width: 9px;
