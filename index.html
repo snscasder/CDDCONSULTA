@@ -223,26 +223,21 @@
       table-layout: fixed;
     }
 
-    thead th{
-      text-align: left;
-      font-size: 13px;
-      font-weight: 700;
-      color: #ffffff;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--guinda-900);
-      background: var(--guinda-800);
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      white-space: nowrap;
-    }
+thead th, tbody td {
+  padding: 10px 12px;         /* Reducimos relleno para un diseño más compacto */
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  word-wrap: break-word;      /* Permite cortar palabras largas si no caben */
+  white-space: normal;        /* Asegura el salto de línea en el texto */
+}
 
-    tbody td{
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text);
-      vertical-align: top;
-    }
+/* Anchos proporcionales por columna */
+th:nth-child(1), td:nth-child(1) { width: 12%; } /* Fracción arancelaria */
+th:nth-child(2), td:nth-child(2) { width: 28%; } /* Descripción */
+th:nth-child(3), td:nth-child(3) { width: 8%;  } /* NICO */
+th:nth-child(4), td:nth-child(4) { width: 28%; } /* Descripción NICO */
+th:nth-child(5), td:nth-child(5) { width: 12%; } /* UMT */
+th:nth-child(6), td:nth-child(6) { width: 12%; } /* Acotación */
 
     tbody tr:nth-child(even) td{
       background: var(--bg-soft);
