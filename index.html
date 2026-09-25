@@ -362,57 +362,50 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
   </div>
 
 <script>
-    // FUNCIÓN PARA DESCARGAR LA TABLA A EXCEL
-function exportarExcel() {
-  const tabla = document.getElementById('tablaDatos') || document.querySelector('table');
+// FUNCIÓN PARA DESCARGAR LA TABLA A EXCEL
+    function exportarExcel() {
+      const tabla = document.getElementById('tablaDatos') || document.querySelector('table');
 
-  if (!tabla) {
-    alert("No se encontró la tabla para exportar.");
-    return;
-  }
+      if (!tabla) {
+        alert("No se encontró la tabla para exportar.");
+        return;
+      }
 
-  // 1. Extraemos los datos de la tabla manualmente como texto puro
-  const filas = [];
-  const trs = tabla.querySelectorAll('tr');
+      const filas = [];
+      const trs = tabla.querySelectorAll('tr');
 
-  trs.forEach(tr => {
-    // Solo procesamos filas visibles (por si hay un filtro de búsqueda activo)
-    if (tr.style.display === 'none') return;
+      trs.forEach(tr => {
+        if (tr.style.display === 'none') return;
 
-    const fila = [];
-    const celdas = tr.querySelectorAll('th, td');
-    
-    celdas.forEach(celda => {
-      // Usamos textContent/innerText para obtener el texto exacto sin HTML ni formatos
-      let texto = celda.innerText || celda.textContent;
-      // Limpiamos espacios extra al inicio/final o saltos de línea
-      texto = texto.trim();
-      fila.push(texto);
-    });
+        const fila = [];
+        const celdas = tr.querySelectorAll('th, td');
+        
+        celdas.forEach(celda => {
+          let texto = celda.innerText || celda.textContent;
+          texto = texto.trim();
+          fila.push(texto);
+        });
 
-    if (fila.length > 0) {
-      filas.push(fila);
+        if (fila.length > 0) {
+          filas.push(fila);
+        }
+      });
+
+      const worksheet = XLSX.utils.aoa_to_sheet(filas, { raw: true });
+
+      for (let cell in worksheet) {
+        if (cell[0] === '!') continue;
+        worksheet[cell].t = 's';
+        worksheet[cell].z = '@';
+      }
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Mercancias_SADER");
+
+      XLSX.writeFile(workbook, "Consulta_Mercancias_SADER.xlsx");
     }
-  });
 
-  // 2. Creamos la hoja de cálculo directamente desde el arreglo de texto puro
-  const worksheet = XLSX.utils.aoa_to_sheet(filas, { raw: true });
-
-  // 3. Forzamos a que el tipo de cada celda sea 's' (string / texto)
-  for (let cell in worksheet) {
-    if (cell[0] === '!') continue;
-    worksheet[cell].t = 's';
-    worksheet[cell].z = '@'; // Formato de celda "Texto" en Excel
-  }
-
-  // 4. Creamos y descargamos el libro de Excel
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Mercancias_SADER");
-
-  XLSX.writeFile(workbook, "Consulta_Mercancias_SADER.xlsx");
-}
-
-   /* =========================================================
+    /* =========================================================
        CONFIGURACIÓN DE ORIGEN DE DATOS 
        =========================================================
     */
@@ -421,7 +414,6 @@ function exportarExcel() {
         id: "1XuVa_tcC1UbGhcXqbfOk1g-xeWKjl26O",
         gid: "1319816404"
       }
-      // , { id: "OTRO_ID_AQUI", gid: "OTRO_GID_AQUI" }  // <- ejemplo de una segunda hoja
     ];
 
     const COLUMN_MAP = {
@@ -457,7 +449,7 @@ function exportarExcel() {
           out[key] = String(value).trim();
         }
         return out;
-      }).filter(item => item.fraccion); // ignora filas totalmente vacías
+      }).filter(item => item.fraccion);
     }
 
     let jsonpCounter = 0;
@@ -532,7 +524,7 @@ function exportarExcel() {
     }
 
     /* =========================
-       Utilidades UI
+       UTILIDADES UI Y BÚSQUEDA
        ========================= */
     const $ = (id) => document.getElementById(id);
 
@@ -543,17 +535,13 @@ function exportarExcel() {
     const countShown = $("countShown");
     const countTotal = $("countTotal");
 
-    countTotal.textContent = DATA.length;
-
     function normalize(str){
       return String(str ?? "")
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, ""); // quita tildes
+        .replace(/[\u0300-\u036f]/g, "");
     }
 
-    // Solo deja dígitos y puntos, así el usuario puede escribir
-    // "283321" o "2833.21.01" o "2833-21-01" y funciona igual.
     function normalizeFraccion(str){
       return String(str ?? "").replace(/[^0-9.]/g, "");
     }
@@ -568,7 +556,7 @@ function exportarExcel() {
         .replaceAll("'", "&#039;");
     }
 
-    // Resalta el término encontrado dentro de la fracción arancelaria
+    // Resalta el número dentro de la fracción arancelaria
     function highlightFraccion(fraccion, rawQuery){
       const safe = escapeHtml(fraccion);
       const q = normalizeFraccion(rawQuery);
@@ -578,8 +566,6 @@ function exportarExcel() {
       const idx = target.indexOf(q);
       if (idx === -1) return safe;
 
-      // Busca la posición equivalente dentro del string original (con puntos)
-      // recorriendo caracter por caracter para no desalinear el resaltado.
       let count = 0, start = -1, end = -1;
       for (let i = 0; i < fraccion.length; i++){
         if (/[0-9.]/.test(fraccion[i])){
@@ -593,6 +579,27 @@ function exportarExcel() {
       const before = escapeHtml(fraccion.slice(0, start));
       const match = escapeHtml(fraccion.slice(start, end));
       const after = escapeHtml(fraccion.slice(end));
+      return `${before}<mark>${match}</mark>${after}`;
+    }
+
+    // Resalta texto general ignorando mayúsculas y acentos
+    function highlightText(text, rawQuery){
+      const safe = escapeHtml(text);
+      if (!rawQuery || !rawQuery.trim()) return safe;
+
+      const normText = normalize(text);
+      const normQuery = normalize(rawQuery);
+
+      const idx = normText.indexOf(normQuery);
+      if (idx === -1) return safe;
+
+      const start = idx;
+      const end = idx + normQuery.length;
+
+      const before = escapeHtml(text.slice(0, start));
+      const match = escapeHtml(text.slice(start, end));
+      const after = escapeHtml(text.slice(end));
+
       return `${before}<mark>${match}</mark>${after}`;
     }
 
@@ -611,22 +618,29 @@ function exportarExcel() {
 
       for (const item of rows){
         const tr = document.createElement("tr");
+
+        const descFraccionHtml = highlightText(item.descripcionfraccion, rawQuery);
+        const descNicoHtml     = highlightText(item.descripcionnico, rawQuery);
+        const acotacionHtml    = highlightText(item.acotacion, rawQuery);
+        const nicoHtml         = highlightText(item.NICO, rawQuery);
+
         const mercHtml = item.mercancias
-          ? escapeHtml(item.mercancias)
+          ? highlightText(item.mercancias, rawQuery)
           : `<span class="merc-empty">Sin datos</span>`;
+
         const estructuraHtml = item.estructura
-    ? escapeHtml(item.estructura)
-    : `<span class="merc-empty">Sin datos</span>`;
+          ? highlightText(item.estructura, rawQuery)
+          : `<span class="merc-empty">Sin datos</span>`;
 
         tr.innerHTML = `
           <td>${highlightFraccion(item.fraccion, rawQuery)}</td>
-          <td>${escapeHtml(item.descripcionfraccion)}</td>
-          <td>${escapeHtml(item.NICO)}</td>
-          <td>${escapeHtml(item.descripcionnico)}</td>
+          <td>${descFraccionHtml}</td>
+          <td>${nicoHtml}</td>
+          <td>${descNicoHtml}</td>
           <td>${escapeHtml(item.umt)}</td>
-          <td>${escapeHtml(item.acotacion)}</td>
+          <td>${acotacionHtml}</td>
           <td>
-             <span class="tag">
+            <span class="tag">
               <span class="dot"></span>
               ${escapeHtml(item.requsito)}
             </span>
@@ -641,30 +655,29 @@ function exportarExcel() {
       countShown.textContent = String(rows.length);
     }
 
-/* =========================
-   Búsqueda por fracción y por palabras
-   ========================= */
-function filterData(query){
-  if (!query || !query.trim()) return DATA;
+    /* =========================
+       FILTRADO POR FRACCIÓN Y PALABRAS
+       ========================= */
+    function filterData(query){
+      if (!query || !query.trim()) return DATA;
 
-  const rawQ = normalize(query);         // Para buscar texto sin acentos ni mayúsculas
-  const numQ = normalizeFraccion(query); // Para buscar números/puntos en la fracción
+      const rawQ = normalize(query);
+      const numQ = normalizeFraccion(query);
 
-  return DATA.filter(item => {
-    // 1. Coincidencia en la fracción arancelaria (ignorando guiones/formatos)
-    const matchFraccion = numQ.length > 0 && normalizeFraccion(item.fraccion).includes(numQ);
+      return DATA.filter(item => {
+        const matchFraccion = numQ.length > 0 && normalizeFraccion(item.fraccion).includes(numQ);
 
-    // 2. Coincidencia en texto en cualquier otra columna relevante
-    const matchTexto = 
-      normalize(item.descripcionfraccion).includes(rawQ) ||
-      normalize(item.descripcionnico).includes(rawQ) ||
-      normalize(item.mercancias).includes(rawQ) ||
-      normalize(item.acotacion).includes(rawQ) ||
-      normalize(item.NICO).includes(rawQ);
+        const matchTexto = 
+          normalize(item.descripcionfraccion).includes(rawQ) ||
+          normalize(item.descripcionnico).includes(rawQ) ||
+          normalize(item.mercancias).includes(rawQ) ||
+          normalize(item.acotacion).includes(rawQ) ||
+          normalize(item.NICO).includes(rawQ) ||
+          normalize(item.estructura).includes(rawQ);
 
-    return matchFraccion || matchTexto;
-  });
-}
+        return matchFraccion || matchTexto;
+      });
+    }
 
     function onSearch(){
       const rawQuery = searchInput.value;
