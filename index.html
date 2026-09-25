@@ -641,14 +641,30 @@ function exportarExcel() {
       countShown.textContent = String(rows.length);
     }
 
-    /* =========================
-       Búsqueda por fracción arancelaria
-       ========================= */
-    function filterData(query){
-      const q = normalizeFraccion(query);
-      if (!q) return DATA;
-      return DATA.filter(item => normalizeFraccion(item.fraccion).includes(q));
-    }
+/* =========================
+   Búsqueda por fracción y por palabras
+   ========================= */
+function filterData(query){
+  if (!query || !query.trim()) return DATA;
+
+  const rawQ = normalize(query);         // Para buscar texto sin acentos ni mayúsculas
+  const numQ = normalizeFraccion(query); // Para buscar números/puntos en la fracción
+
+  return DATA.filter(item => {
+    // 1. Coincidencia en la fracción arancelaria (ignorando guiones/formatos)
+    const matchFraccion = numQ.length > 0 && normalizeFraccion(item.fraccion).includes(numQ);
+
+    // 2. Coincidencia en texto en cualquier otra columna relevante
+    const matchTexto = 
+      normalize(item.descripcionfraccion).includes(rawQ) ||
+      normalize(item.descripcionnico).includes(rawQ) ||
+      normalize(item.mercancias).includes(rawQ) ||
+      normalize(item.acotacion).includes(rawQ) ||
+      normalize(item.NICO).includes(rawQ);
+
+    return matchFraccion || matchTexto;
+  });
+}
 
     function onSearch(){
       const rawQuery = searchInput.value;
