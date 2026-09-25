@@ -596,7 +596,7 @@ function exportarExcel() {
       return `${before}<mark>${match}</mark>${after}`;
     }
 
-    function renderRows(rows, rawQuery){
+function renderRows(rows, rawQuery){
       tableBody.innerHTML = "";
 
       if (!rows.length){
@@ -611,22 +611,29 @@ function exportarExcel() {
 
       for (const item of rows){
         const tr = document.createElement("tr");
+
+        const descFraccionHtml = highlightText(item.descripcionfraccion, rawQuery);
+        const descNicoHtml     = highlightText(item.descripcionnico, rawQuery);
+        const acotacionHtml    = highlightText(item.acotacion, rawQuery);
+        const nicoHtml         = highlightText(item.NICO, rawQuery);
+
         const mercHtml = item.mercancias
-          ? escapeHtml(item.mercancias)
+          ? highlightText(item.mercancias, rawQuery)
           : `<span class="merc-empty">Sin datos</span>`;
+
         const estructuraHtml = item.estructura
-    ? escapeHtml(item.estructura)
-    : `<span class="merc-empty">Sin datos</span>`;
+          ? highlightText(item.estructura, rawQuery)
+          : `<span class="merc-empty">Sin datos</span>`;
 
         tr.innerHTML = `
           <td>${highlightFraccion(item.fraccion, rawQuery)}</td>
-          <td>${escapeHtml(item.descripcionfraccion)}</td>
-          <td>${escapeHtml(item.NICO)}</td>
-          <td>${escapeHtml(item.descripcionnico)}</td>
+          <td>${descFraccionHtml}</td>
+          <td>${nicoHtml}</td>
+          <td>${descNicoHtml}</td>
           <td>${escapeHtml(item.umt)}</td>
-          <td>${escapeHtml(item.acotacion)}</td>
+          <td>${acotacionHtml}</td>
           <td>
-             <span class="tag">
+            <span class="tag">
               <span class="dot"></span>
               ${escapeHtml(item.requsito)}
             </span>
