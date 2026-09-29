@@ -297,6 +297,68 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
       .meta{ width: 100%; justify-content:flex-start; }
       .site-nav{ gap: 18px; padding: 14px 16px; flex-wrap: wrap; }
     }
+
+    /* Estilos para la sección de enlaces institucionales */
+.quick-links-section {
+  margin-top: 40px;
+  padding: 24px 10px;
+  border-top: 2px solid var(--border);
+}
+
+.quick-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.quick-link-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  color: #262124;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.quick-link-card:hover {
+  transform: translateX(4px);
+  opacity: 0.85;
+}
+
+/* Caja del icono estilo dorado degradado */
+.quick-link-icon {
+  width: 90px;
+  height: 55px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  border: 1px solid #d4c1a5;
+  background: linear-gradient(135deg, #fbf7f0 0%, #e2cdb0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.quick-link-icon svg {
+  width: 32px;
+  height: 32px;
+  stroke: #8a6d3b;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Texto del enlace */
+.quick-link-text {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a2530;
+  line-height: 1.25;
+}
   </style>
 
 <!-- LIBRERÍA EXPORTAR A EXCEL -->
@@ -689,5 +751,85 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
 
     loadData();
   </script>
+  <!-- APARTADO DE ENLACES E INSTITUCIONALES -->
+<section class="quick-links-section">
+  <div class="quick-links-grid">
+    
+    <!-- Opción 1: Archivos -->
+    <a href="https://ejemplo.com/archivos" target="_blank" rel="noopener" class="quick-link-card">
+      <div class="quick-link-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          <polyline points="12 10 12 16 14 14"></polyline>
+          <polyline points="12 16 10 14"></polyline>
+        </svg>
+      </div>
+      <span class="quick-link-text">Archivos</span>
+    </a>
+
+    <!-- Opción 2: Apertura Gubernamental -->
+    <a href="https://ejemplo.com/apertura" target="_blank" rel="noopener" class="quick-link-card">
+      <div class="quick-link-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <path d="M9 15l2 2 4-4"></path>
+        </svg>
+      </div>
+      <span class="quick-link-text">Apertura Gubernamental</span>
+    </a>
+
+    <!-- Opción 3: Acceso a la información -->
+    <a href="https://ejemplo.com/acceso-informacion" target="_blank" rel="noopener" class="quick-link-card">
+      <div class="quick-link-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M18 11V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7"></path>
+          <path d="M8 10h4"></path>
+          <path d="M8 14h2"></path>
+          <circle cx="17" cy="17" r="4"></circle>
+          <line x1="17" y1="15" x2="17" y2="17"></line>
+          <line x1="17" y1="19" x2="17.01" y2="19"></line>
+        </svg>
+      </div>
+      <span class="quick-link-text">Acceso a la información</span>
+    </a>
+
+    <!-- Opción 4: Gobierno Abierto -->
+    <a href="https://ejemplo.com/gobierno-abierto" target="_blank" rel="noopener" class="quick-link-card">
+      <div class="quick-link-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          <path d="M9 14l2 2 4-4"></path>
+        </svg>
+      </div>
+      <span class="quick-link-text">Gobierno Abierto</span>
+    </a>
+
+    <!-- Opción 5: Datos Abiertos -->
+    <a href="https://ejemplo.com/datos-abiertos" target="_blank" rel="noopener" class="quick-link-card">
+      <div class="quick-link-icon">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+        </svg>
+      </div>
+      <span class="quick-link-text">Datos Abiertos</span>
+    </a>
+
+    <!-- Opción 6: Protección de Datos Personales del Senasica -->
+    <a href="https://ejemplo.com/proteccion-datos" target="_blank" rel="noopener" class="quick-link-card">
+      <div class="quick-link-icon">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          <circle cx="12" cy="16" r="1"></circle>
+        </svg>
+      </div>
+      <span class="quick-link-text">Protección de Datos Personales del Senasica</span>
+    </a>
+
+  </div>
+</section>
 </body>
 </html>
