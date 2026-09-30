@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -117,7 +115,7 @@
       margin-top: 2px;
     }
 
-    /* Barra de búsqueda */
+    /* Barra de búsqueda y herramientas */
     .toolbar{
       display:flex;
       flex-wrap: wrap;
@@ -125,29 +123,53 @@
       align-items:center;
       justify-content: space-between;
       margin: 18px 0 18px;
-      }
+    }
 
-    .btn-excel{
+    /* Convertidor de Libras a Kilos (Discreto) */
+    .converter-wrap {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #eaf4ee;
-      color: #1e6b3f;
-      border: 1px solid #bfe0cc;
-      padding: 10px 16px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
       border-radius: var(--radius);
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
       box-shadow: var(--shadow);
+      font-size: 13px;
+      color: var(--text);
     }
 
-    .btn-excel:hover {
-      background: #dcefe3;
-      border-color: #9fd4b4;
-      color: #144a2b;
-      transform: translateY(-1px);
+    .converter-wrap label {
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .converter-wrap input {
+      width: 90px;
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--card);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .converter-wrap input:focus {
+      border-color: var(--guinda-700);
+    }
+
+    .converter-result {
+      font-weight: 700;
+      color: var(--guinda-700);
+      background: var(--guinda-100);
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #e3c3d1;
+      white-space: nowrap;
     }
 
     .search{
@@ -224,24 +246,23 @@
       table-layout: fixed;
     }
 
-thead th, tbody td {
-  padding: 10px 12px;         /* Reducimos relleno para un diseño más compacto */
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-  word-wrap: break-word;      /* Permite cortar palabras largas si no caben */
-  white-space: normal;        /* Asegura el salto de línea en el texto */
-}
+    thead th, tbody td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      word-wrap: break-word;
+      white-space: normal;
+    }
 
-/* Anchos proporcionales para las 9 columnas */
-th:nth-child(1), td:nth-child(1) { width: 7%;  } /* Fracción arancelaria */
-th:nth-child(2), td:nth-child(2) { width: 11%; } /* Descripción */
-th:nth-child(3), td:nth-child(3) { width: 4%;  } /* NICO */
-th:nth-child(4), td:nth-child(4) { width: 11%; } /* Descripción NICO */
-th:nth-child(5), td:nth-child(5) { width: 5%;  } /* UMT */
-th:nth-child(6), td:nth-child(6) { width: 6%;  } /* Acotación */
-th:nth-child(7), td:nth-child(7) { width: 8%; } /* Requisito */
-th:nth-child(8), td:nth-child(8) { width: 8%; } /* Mercancías */
-th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁS ANCHA) */
+    th:nth-child(1), td:nth-child(1) { width: 7%;  }
+    th:nth-child(2), td:nth-child(2) { width: 11%; }
+    th:nth-child(3), td:nth-child(3) { width: 4%;  }
+    th:nth-child(4), td:nth-child(4) { width: 11%; }
+    th:nth-child(5), td:nth-child(5) { width: 5%;  }
+    th:nth-child(6), td:nth-child(6) { width: 6%;  }
+    th:nth-child(7), td:nth-child(7) { width: 8%; }
+    th:nth-child(8), td:nth-child(8) { width: 8%; }
+    th:nth-child(9), td:nth-child(9) { width: 40%; }
 
     tbody tr:nth-child(even) td{
       background: var(--bg-soft);
@@ -251,7 +272,6 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
       background: var(--guinda-100);
     }
 
-    /* Resaltado del término buscado */
     mark{
       background: #f3c8d8;
       color: var(--guinda-900);
@@ -260,17 +280,17 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
     }
 
     .tag{
-      display: block;          /* Cambiado de inline-flex a block para fluir con el texto */
-  padding: 0;              /* Eliminamos el relleno de cápsula */
-  border: none;            /* Quitamos el borde */
-  background: transparent; /* Quitamos el fondo rosado */
-  color: var(--text);
-  font-size: 14px;
-  white-space: normal;     /* Permite que el texto dé saltos de línea sin encimarse */
+      display: block;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      white-space: normal;
     }
 
-     .tag .dot {
-  display: none;
+    .tag .dot {
+      display: none;
     }
 
     .empty{
@@ -288,7 +308,6 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
       font-style: italic;
     }
 
-    /* Responsivo */
     @media (max-width: 860px){
       header{
         flex-direction: column;
@@ -299,71 +318,65 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
       .site-nav{ gap: 18px; padding: 14px 16px; flex-wrap: wrap; }
     }
 
-    /* Estilos para la sección de enlaces institucionales */
-.quick-links-section {
-  margin-top: 40px;
-  padding: 24px 10px;
-  border-top: 2px solid var(--border);
-}
+    .quick-links-section {
+      margin-top: 40px;
+      padding: 24px 10px;
+      border-top: 2px solid var(--border);
+    }
 
-.quick-links-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px 30px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
+    .quick-links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
 
-.quick-link-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  text-decoration: none;
-  color: #262124;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
+    .quick-link-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: #262124;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
 
-.quick-link-card:hover {
-  transform: translateX(4px);
-  opacity: 0.85;
-}
+    .quick-link-card:hover {
+      transform: translateX(4px);
+      opacity: 0.85;
+    }
 
-/* Caja del icono estilo dorado degradado */
-.quick-link-icon {
-  width: 90px;
-  height: 55px;
-  flex-shrink: 0;
-  border-radius: 12px;
-  border: 1px solid #d4c1a5;
-  background: linear-gradient(135deg, #fbf7f0 0%, #e2cdb0 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-}
+    .quick-link-icon {
+      width: 90px;
+      height: 55px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      border: 1px solid #d4c1a5;
+      background: linear-gradient(135deg, #fbf7f0 0%, #e2cdb0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
 
-.quick-link-icon svg {
-  width: 32px;
-  height: 32px;
-  stroke: #8a6d3b;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+    .quick-link-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: #8a6d3b;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
-/* Texto del enlace */
-.quick-link-text {
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 700;
-  color: #1a2530;
-  line-height: 1.25;
-}
+    .quick-link-text {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a2530;
+      line-height: 1.25;
+    }
   </style>
-
-<!-- LIBRERÍA EXPORTAR A EXCEL -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -387,10 +400,13 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
         <span class="pill" id="countTotal">0</span>
       </div>
 
-<!-- BOTÓN DE DESCARGA -->
-      <button type="button" class="btn-excel" onclick="exportarExcel()">
-        Descargar Excel
-      </button>
+      <!-- CONVERTIDOR DE LIBRAS A KILOS (DISCRETO) -->
+      <div class="converter-wrap" title="Conversión con factor 0.4536">
+        <label for="lbsInput">Libras (lb):</label>
+        <input id="lbsInput" type="number" step="any" placeholder="0" oninput="convertirLbsAKg()" />
+        <span>=</span>
+        <div class="converter-result"><span id="kgResult">0.00</span> kg</div>
+      </div>
     </section>
 
     <div class="table-card">
@@ -425,47 +441,21 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
   </div>
 
 <script>
-// FUNCIÓN PARA DESCARGAR LA TABLA A EXCEL
-    function exportarExcel() {
-      const tabla = document.getElementById('tablaDatos') || document.querySelector('table');
-
-      if (!tabla) {
-        alert("No se encontró la tabla para exportar.");
+    // FUNCIÓN PARA CONVERTIR LIBRAS A KILOS (FACTOR 0.4536)
+    function convertirLbsAKg() {
+      const lbs = parseFloat(document.getElementById("lbsInput").value);
+      const kgResult = document.getElementById("kgResult");
+      
+      if (isNaN(lbs) || lbs <= 0) {
+        kgResult.textContent = "0.00";
         return;
       }
-
-      const filas = [];
-      const trs = tabla.querySelectorAll('tr');
-
-      trs.forEach(tr => {
-        if (tr.style.display === 'none') return;
-
-        const fila = [];
-        const celdas = tr.querySelectorAll('th, td');
-        
-        celdas.forEach(celda => {
-          let texto = celda.innerText || celda.textContent;
-          texto = texto.trim();
-          fila.push(texto);
-        });
-
-        if (fila.length > 0) {
-          filas.push(fila);
-        }
+      
+      const kg = lbs * 0.4536;
+      kgResult.textContent = kg.toLocaleString("es-MX", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 3
       });
-
-      const worksheet = XLSX.utils.aoa_to_sheet(filas, { raw: true });
-
-      for (let cell in worksheet) {
-        if (cell[0] === '!') continue;
-        worksheet[cell].t = 's';
-        worksheet[cell].z = '@';
-      }
-
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Mercancias_SADER");
-
-      XLSX.writeFile(workbook, "Consulta_Mercancias_SADER.xlsx");
     }
 
     /* =========================================================
@@ -619,7 +609,6 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
         .replaceAll("'", "&#039;");
     }
 
-    // Resalta el número dentro de la fracción arancelaria
     function highlightFraccion(fraccion, rawQuery){
       const safe = escapeHtml(fraccion);
       const q = normalizeFraccion(rawQuery);
@@ -645,7 +634,6 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
       return `${before}<mark>${match}</mark>${after}`;
     }
 
-    // Resalta texto general ignorando mayúsculas y acentos
     function highlightText(text, rawQuery){
       const safe = escapeHtml(text);
       if (!rawQuery || !rawQuery.trim()) return safe;
@@ -718,9 +706,6 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
       countShown.textContent = String(rows.length);
     }
 
-    /* =========================
-       FILTRADO POR FRACCIÓN Y PALABRAS
-       ========================= */
     function filterData(query){
       if (!query || !query.trim()) return DATA;
 
@@ -752,47 +737,48 @@ th:nth-child(9), td:nth-child(9) { width: 40%; } /* Estructura actual LIGIE (MÁ
 
     loadData();
   </script>
+
   <!-- APARTADO DE ENLACES  -->
-<section class="quick-links-section">
-  <div class="quick-links-grid">
-    
-    <!-- Opción 1: Acuerdo -->
-    <a href="https://www.gob.mx/senasica/documentos/acuerdo-que-establece-las-mercancias-cuya-importacion-esta-sujeta-a-regulacion-por-parte-de-la-secretaria-de-agricultura-y-desarrollo-rural?state=published" target="_blank" rel="noopener" class="quick-link-card">
-      <div class="quick-link-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-          <polyline points="12 10 12 16 14 14"></polyline>
-          <polyline points="12 16 10 14"></polyline>
-        </svg>
-      </div>
-      <span class="quick-link-text">Acuerdo que modifica al diverso que establece las mercancías cuya importación está sujeta a regulación por parte de la Secretaría de Agricultura y Desarrollo Rural.</span>
-    </a>
+  <section class="quick-links-section">
+    <div class="quick-links-grid">
+      
+      <!-- Opción 1: Acuerdo -->
+      <a href="https://www.gob.mx/senasica/documentos/acuerdo-que-establece-las-mercancias-cuya-importacion-esta-sujeta-a-regulacion-por-parte-de-la-secretaria-de-agricultura-y-desarrollo-rural?state=published" target="_blank" rel="noopener" class="quick-link-card">
+        <div class="quick-link-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            <polyline points="12 10 12 16 14 14"></polyline>
+            <polyline points="12 16 10 14"></polyline>
+          </svg>
+        </div>
+        <span class="quick-link-text">Acuerdo que modifica al diverso que establece las mercancías cuya importación está sujeta a regulación por parte de la Secretaría de Agricultura y Desarrollo Rural.</span>
+      </a>
 
-    <!-- Opción 4: ligie -->
-    <a href="https://www.diputados.gob.mx/LeyesBiblio/ref/ligie_2022.htm" target="_blank" rel="noopener" class="quick-link-card">
-      <div class="quick-link-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-          <path d="M9 14l2 2 4-4"></path>
-        </svg>
-      </div>
-      <span class="quick-link-text">Ley de los Impuestos Generales de Importación y de Exportación</span>
-    </a>
+      <!-- Opción 2: LIGIE -->
+      <a href="https://www.diputados.gob.mx/LeyesBiblio/ref/ligie_2022.htm" target="_blank" rel="noopener" class="quick-link-card">
+        <div class="quick-link-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            <path d="M9 14l2 2 4-4"></path>
+          </svg>
+        </div>
+        <span class="quick-link-text">Ley de los Impuestos Generales de Importación y de Exportación</span>
+      </a>
 
-        <!-- Opción 2: requisitos-->
-    <a href="https://www.gob.mx/senasica/documentos/requisitos-de-importacion?state=draft" target="_blank" rel="noopener" class="quick-link-card">
-      <div class="quick-link-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <polyline points="14 2 14 8 20 8"></polyline>
-          <path d="M9 15l2 2 4-4"></path>
-        </svg>
-      </div>
-      <span class="quick-link-text">Requisitos de importación</span>
-    </a>
+      <!-- Opción 3: Requisitos -->
+      <a href="https://www.gob.mx/senasica/documentos/requisitos-de-importacion?state=draft" target="_blank" rel="noopener" class="quick-link-card">
+        <div class="quick-link-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <path d="M9 15l2 2 4-4"></path>
+          </svg>
+        </div>
+        <span class="quick-link-text">Requisitos de importación</span>
+      </a>
 
-  </div>
-</section>
+    </div>
+  </section>
 </body>
 </html>
