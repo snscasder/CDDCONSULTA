@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Portal CDD- Consulta</title>
- <style>
+  <style>
     :root{
       --bg: #ffffff;
       --bg-soft: #faf7f8;         
@@ -39,11 +39,11 @@
       min-height: 100vh;
     }
 
-.site-topbar {
-  background: var(--guinda-900);
-  height: 34px;
-  border-left: 6px solid #b38e5d; 
-}
+    .site-topbar {
+      background: var(--guinda-900);
+      height: 34px;
+      border-left: 6px solid #b38e5d; 
+    }
     .site-nav{
       background: var(--guinda-800);
       display:flex;
@@ -100,21 +100,6 @@
       line-height: 1.4;
     }
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: var(--card2);
-      box-shadow: var(--shadow);
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
-      margin-top: 2px;
-    }
-
     /* Barra de búsqueda y herramientas */
     .toolbar{
       display:flex;
@@ -123,53 +108,6 @@
       align-items:center;
       justify-content: space-between;
       margin: 18px 0 18px;
-    }
-
-    /* Convertidor de Libras a Kilos (Discreto) */
-    .converter-wrap {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--card2);
-      border: 1px solid var(--border);
-      padding: 8px 14px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      font-size: 13px;
-      color: var(--text);
-    }
-
-    .converter-wrap label {
-      font-weight: 600;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .converter-wrap input {
-      width: 90px;
-      padding: 5px 8px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--card);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 13px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .converter-wrap input:focus {
-      border-color: var(--guinda-700);
-    }
-
-    .converter-result {
-      font-weight: 700;
-      color: var(--guinda-700);
-      background: var(--guinda-100);
-      padding: 4px 8px;
-      border-radius: 6px;
-      border: 1px solid #e3c3d1;
-      white-space: nowrap;
     }
 
     .search{
@@ -207,27 +145,71 @@
     }
     input[type="search"]::placeholder{ color: #9c8b93; }
 
-    .meta{
-      flex: 0 0 auto;
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 14px;
-      padding: 10px 12px;
-      border-radius: var(--radius);
+    /* OPCIÓN B: Contador de resultados en píldora única y discreta */
+    .badge-resultados {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background-color: var(--card2);
       border: 1px solid var(--border);
-      background: var(--card2);
+      font-size: 13px;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+      white-space: nowrap;
     }
 
-    .pill{
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: var(--guinda-100);
-      border: 1px solid #e3c3d1;
+    .badge-resultados strong {
       color: var(--guinda-700);
       font-weight: 700;
-      letter-spacing: .2px;
+    }
+
+    /* Convertidor de Libras a Kilos (Discreto) */
+    .converter-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .converter-wrap label {
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .converter-wrap input {
+      width: 80px;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--card);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .converter-wrap input:focus {
+      border-color: var(--guinda-700);
+    }
+
+    .converter-result {
+      font-weight: 700;
+      color: var(--guinda-700);
+      background: var(--guinda-100);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid #e3c3d1;
+      white-space: nowrap;
     }
 
     /* Tabla */
@@ -314,7 +296,7 @@
         align-items:flex-start;
       }
       table{ min-width: 860px; }
-      .meta{ width: 100%; justify-content:flex-start; }
+      .badge-resultados{ width: 100%; justify-content:flex-start; }
       .site-nav{ gap: 18px; padding: 14px 16px; flex-wrap: wrap; }
     }
 
@@ -393,14 +375,12 @@
         <input id="searchInput" type="search" placeholder="Escribe una fracción arancelaria (ej.0201.10.01 ) o una palabra..." autocomplete="off" />
       </div>
 
-      <div class="meta" aria-live="polite">
-        <span>Mostrando:</span>
-        <span class="pill" id="countShown">0</span>
-        <span>de</span>
-        <span class="pill" id="countTotal">0</span>
+      <!-- PÍLDORA ÚNICA MINIMALISTA DE RESULTADOS -->
+      <div class="badge-resultados" aria-live="polite">
+        Mostrando <strong id="countShown">0</strong> de <strong id="countTotal">0</strong>
       </div>
 
-      <!-- CONVERTIDOR DE LIBRAS A KILOS (DISCRETO) -->
+      <!-- CONVERTIDOR DE LIBRAS A KILOS -->
       <div class="converter-wrap" title="Conversión con factor 0.4536">
         <label for="lbsInput">Libras (lb):</label>
         <input id="lbsInput" type="number" step="any" placeholder="0" oninput="convertirLbsAKg()" />
@@ -563,7 +543,7 @@
         const chunks = await Promise.all(SHEET_SOURCES.map(fetchSheetAsRows));
         DATA = chunks.flat();
         loadingState.style.display = "none";
-        countTotal.textContent = DATA.length;
+        document.getElementById("countTotal").textContent = DATA.length.toLocaleString("es-MX");
         renderRows(DATA, "");
       } catch (err) {
         console.error("Error cargando datos", err);
@@ -703,7 +683,7 @@
       }
 
       tableBody.appendChild(frag);
-      countShown.textContent = String(rows.length);
+      countShown.textContent = rows.length.toLocaleString("es-MX");
     }
 
     function filterData(query){
