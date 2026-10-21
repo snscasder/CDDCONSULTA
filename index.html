@@ -7,20 +7,20 @@
   <style>
     :root{
       --bg: #ffffff;
-      --bg-soft: #faf7f8;         
+      --bg-soft: #faf7f8;
       --card: #ffffff;
       --card2: #f6eef1;
-      --text: #262124;             
+      --text: #262124;
       --muted: #6b5a62;
       --border: #e7dde1;
 
-      --guinda-900: #3d0e26;      
-      --guinda-800: #56163a;       
-      --guinda-700: #6d1c47;       
-      --guinda-100: #f5e6ec;      
+      --guinda-900: #3d0e26;
+      --guinda-800: #56163a;
+      --guinda-700: #6d1c47;
+      --guinda-100: #f5e6ec;
 
       --accent: var(--guinda-700);
-      --accent2: #2f7d4f;          
+      --accent2: #2f7d4f;
       --danger:#b3261e;
 
       --shadow: 0 8px 22px rgba(61,14,38,.08);
@@ -42,7 +42,7 @@
     .site-topbar {
       background: var(--guinda-900);
       height: 34px;
-      border-left: 6px solid #b38e5d; 
+      border-left: 6px solid #b38e5d;
     }
     .site-nav{
       background: var(--guinda-800);
@@ -145,7 +145,6 @@
     }
     input[type="search"]::placeholder{ color: #9c8b93; }
 
-    /* OPCIÓN B: Contador de resultados en píldora única y discreta */
     .badge-resultados {
       display: inline-flex;
       align-items: center;
@@ -165,7 +164,7 @@
       font-weight: 700;
     }
 
-    /* Convertidor de Libras a Kilos (Discreto) */
+    /* Convertidor de Libras a Kilos */
     .converter-wrap {
       display: inline-flex;
       align-items: center;
@@ -358,6 +357,97 @@
       color: #1a2530;
       line-height: 1.25;
     }
+
+    /* ===== Galería carrusel ===== */
+    .gallery-section{
+      margin-top: 40px;
+      padding: 24px 10px 40px;
+      border-top: 2px solid var(--border);
+    }
+    .gallery-title{
+      font-family: var(--font-display);
+      color: var(--guinda-700);
+      font-size: clamp(22px, 3vw, 30px);
+      text-align: center;
+      margin: 0 0 18px;
+    }
+    .carousel{
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      background: var(--card2);
+      outline: none;
+    }
+    .carousel-track{
+      display: flex;
+      transition: transform .5s ease;
+    }
+    .carousel-slide{
+      min-width: 100%;
+      margin: 0;
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card2);
+    }
+    .carousel-slide img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;   /* cambia a "cover" si prefieres llenar el recuadro */
+      display: block;
+    }
+    .carousel-slide figcaption{
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 10px 16px;
+      background: linear-gradient(transparent, rgba(61,14,38,.85));
+      color: #fff;
+      font-size: 14px;
+    }
+    .carousel-btn{
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px; height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(61,14,38,.75);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background .2s;
+    }
+    .carousel-btn:hover{ background: var(--guinda-700); }
+    .carousel-btn.prev{ left: 12px; }
+    .carousel-btn.next{ right: 12px; }
+    .carousel-dots{
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+    }
+    .carousel-dots button{
+      width: 10px; height: 10px;
+      padding: 0;
+      border-radius: 50%;
+      border: none;
+      background: #d9c9d0;
+      cursor: pointer;
+    }
+    .carousel-dots button.active{
+      background: var(--guinda-700);
+      transform: scale(1.25);
+    }
   </style>
 </head>
 <body>
@@ -375,12 +465,10 @@
         <input id="searchInput" type="search" placeholder="Escribe una fracción arancelaria (ej.0201.10.01 ) o una palabra..." autocomplete="off" />
       </div>
 
-      <!-- PÍLDORA ÚNICA MINIMALISTA DE RESULTADOS -->
       <div class="badge-resultados" aria-live="polite">
         Mostrando <strong id="countShown">0</strong> de <strong id="countTotal">0</strong>
       </div>
 
-      <!-- CONVERTIDOR DE LIBRAS A KILOS -->
       <div class="converter-wrap" title="Conversión con factor 0.4536">
         <label for="lbsInput">Libras (lb):</label>
         <input id="lbsInput" type="number" step="any" placeholder="0" oninput="convertirLbsAKg()" />
@@ -425,12 +513,12 @@
     function convertirLbsAKg() {
       const lbs = parseFloat(document.getElementById("lbsInput").value);
       const kgResult = document.getElementById("kgResult");
-      
+
       if (isNaN(lbs) || lbs <= 0) {
         kgResult.textContent = "0.00";
         return;
       }
-      
+
       const kg = lbs * 0.4536;
       kgResult.textContent = kg.toLocaleString("es-MX", {
         minimumFractionDigits: 2,
@@ -439,9 +527,8 @@
     }
 
     /* =========================================================
-       CONFIGURACIÓN DE ORIGEN DE DATOS 
-       =========================================================
-    */
+       CONFIGURACIÓN DE ORIGEN DE DATOS
+       ========================================================= */
     const SHEET_SOURCES = [
       {
         id: "1XuVa_tcC1UbGhcXqbfOk1g-xeWKjl26O",
@@ -695,7 +782,7 @@
       return DATA.filter(item => {
         const matchFraccion = numQ.length > 0 && normalizeFraccion(item.fraccion).includes(numQ);
 
-        const matchTexto = 
+        const matchTexto =
           normalize(item.descripcionfraccion).includes(rawQ) ||
           normalize(item.descripcionnico).includes(rawQ) ||
           normalize(item.mercancias).includes(rawQ) ||
@@ -721,7 +808,7 @@
   <!-- APARTADO DE ENLACES  -->
   <section class="quick-links-section">
     <div class="quick-links-grid">
-      
+
       <!-- Opción 1: Acuerdo -->
       <a href="https://www.gob.mx/senasica/documentos/acuerdo-que-establece-las-mercancias-cuya-importacion-esta-sujeta-a-regulacion-por-parte-de-la-secretaria-de-agricultura-y-desarrollo-rural?state=published" target="_blank" rel="noopener" class="quick-link-card">
         <div class="quick-link-icon">
@@ -760,5 +847,110 @@
 
     </div>
   </section>
+
+  <!-- GALERÍA CARRUSEL -->
+  <section class="gallery-section" id="gallerySection">
+    <h2 class="gallery-title">Galería</h2>
+    <div class="carousel" id="carousel" tabindex="0" aria-label="Galería de imágenes">
+      <div class="carousel-track" id="carouselTrack"></div>
+      <button class="carousel-btn prev" id="carPrev" aria-label="Anterior">&#10094;</button>
+      <button class="carousel-btn next" id="carNext" aria-label="Siguiente">&#10095;</button>
+      <div class="carousel-dots" id="carDots"></div>
+    </div>
+  </section>
+
+  <script>
+  (function(){
+    // 👉 Configuración
+    const FOLDER_ID = "1hocr0d_9yb7yqC4-OA-mHWb14EkS_h13";
+    const API_KEY   = "AIzaSyBeXTHE198itRAMnz2b_J53c5JhZV06Irk";   // API key de Google Cloud (Drive API habilitada)
+    const AUTOPLAY_MS = 5000;
+    const SHOW_FILENAME_AS_CAPTION = false;     // true = muestra el nombre del archivo como pie de foto
+
+    const driveUrl = id => `https://drive.google.com/thumbnail?id=${id}&sz=w1600`;
+
+    const section = document.getElementById("gallerySection");
+    const track   = document.getElementById("carouselTrack");
+    const dotsBox = document.getElementById("carDots");
+    const carousel= document.getElementById("carousel");
+
+    let valid = [], index = 0, timer = null;
+
+    async function loadFolder(){
+      if (!API_KEY || API_KEY.startsWith("PEGA_")) { section.style.display = "none"; return; }
+      try {
+        const q = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/' and trashed = false`);
+        const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&orderBy=name&pageSize=200&key=${API_KEY}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        valid = (data.files || []).map(f => ({
+          id: f.id,
+          caption: SHOW_FILENAME_AS_CAPTION ? f.name.replace(/\.[^.]+$/, "") : ""
+        }));
+      } catch (err) {
+        console.error("No se pudo cargar la carpeta de Drive:", err);
+      }
+      if (!valid.length){ section.style.display = "none"; return; }
+      build();
+    }
+
+    function build(){
+      valid.forEach((img, i) => {
+        const fig = document.createElement("figure");
+        fig.className = "carousel-slide";
+        const el = document.createElement("img");
+        el.src = driveUrl(img.id);
+        el.alt = img.caption || ("Imagen " + (i + 1));
+        el.loading = i === 0 ? "eager" : "lazy";
+        el.referrerPolicy = "no-referrer";
+        fig.appendChild(el);
+        if (img.caption){
+          const cap = document.createElement("figcaption");
+          cap.textContent = img.caption;
+          fig.appendChild(cap);
+        }
+        track.appendChild(fig);
+
+        const dot = document.createElement("button");
+        dot.setAttribute("aria-label", "Ir a la imagen " + (i + 1));
+        dot.addEventListener("click", () => { goTo(i); restart(); });
+        dotsBox.appendChild(dot);
+      });
+      goTo(0);
+      start();
+    }
+
+    function goTo(i){
+      index = (i + valid.length) % valid.length;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      [...dotsBox.children].forEach((d, k) => d.classList.toggle("active", k === index));
+    }
+    function start(){ stop(); if (valid.length > 1) timer = setInterval(() => goTo(index + 1), AUTOPLAY_MS); }
+    function stop(){ clearInterval(timer); }
+    function restart(){ stop(); start(); }
+
+    document.getElementById("carPrev").addEventListener("click", () => { goTo(index - 1); restart(); });
+    document.getElementById("carNext").addEventListener("click", () => { goTo(index + 1); restart(); });
+
+    carousel.addEventListener("mouseenter", stop);
+    carousel.addEventListener("mouseleave", start);
+
+    carousel.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft"){ goTo(index - 1); restart(); }
+      if (e.key === "ArrowRight"){ goTo(index + 1); restart(); }
+    });
+
+    let startX = 0;
+    carousel.addEventListener("touchstart", e => { startX = e.touches[0].clientX; stop(); }, {passive:true});
+    carousel.addEventListener("touchend", e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) goTo(index + (dx < 0 ? 1 : -1));
+      start();
+    });
+
+    loadFolder();
+  })();
+  </script>
 </body>
 </html>
